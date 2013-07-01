@@ -17,7 +17,7 @@ module Digestive
 
       attr_accessible :username, :password, :role_id, :name
 
-      before_save { |user| digest_encrypt_password(user) }
+      before_save :digest_encrypt_password
 
       def role_name
         role.name
@@ -44,10 +44,9 @@ module Digestive
 
       private
 
-      def digest_encrypt_password(user)
+      def digest_encrypt_password
         if password_changed? || username_changed?
-          username = user.username || self.username
-          a1 = [username, self.class::DIGEST_REALM, user.password].join(':')
+          a1 = [username, DIGEST_REALM, password].join(':')
           self.password = Digest::MD5.hexdigest(a1).to_s
         end
       end
