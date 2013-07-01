@@ -2,6 +2,8 @@
 
 A super-simple implementation of Digest Authentication for Rails apps.
 
+NB this is WORK IN PROGRESS and NOT FOR USE IN PRODUCTION (or really, anywhere).
+
 ```ruby
 include Digestive
 # authenticate with the default privilege level
