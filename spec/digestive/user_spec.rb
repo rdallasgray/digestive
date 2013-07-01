@@ -8,6 +8,9 @@ describe Digestive::User do
     class << self
       attr_writer :attrs
     end
+    def self.find(id)
+      new(@attrs)
+    end
     def self.find_by_name(name)
       new(@attrs)
     end
