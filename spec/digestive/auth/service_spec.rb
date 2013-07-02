@@ -5,16 +5,6 @@ require_relative '../../../lib/digestive/auth/service'
 
 describe Digestive::Auth::Service do
 
-  class User
-    DIGEST_REALM = 'test@test.com'
-    def self.find_by_username(username)
-      self.new
-    end
-    def password
-      'test'
-    end
-  end
-
   class Provider
     def self.request_http_digest_authentication(realm, message=nil)
     end

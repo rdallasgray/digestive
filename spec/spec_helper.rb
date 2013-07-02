@@ -1,8 +1,20 @@
 # encoding: UTF-8
 
+gem 'activerecord'
+
 require 'active_record'
 require 'minitest/autorun'
 require 'mocha/setup'
+
+class User
+  DIGEST_REALM = 'test'
+  def self.find_by_username(username)
+    self.new
+  end
+  def password
+    'test'
+  end
+end
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'memory')
 
