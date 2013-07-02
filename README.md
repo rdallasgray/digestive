@@ -1,20 +1,24 @@
 # Digestive
 
-A super-simple implementation of Digest Authentication for Rails apps.
+A super-simple microframework to implement Digest Authentication for
+Rails apps.
 
-NB this is WORK IN PROGRESS and NOT FOR USE IN PRODUCTION (or really, anywhere).
+NB USE AT YOUR OWN RISK!
 
 ```ruby
-include Digestive
-# authenticate with the default privilege level
+include Digestive::Auth
+# simple simon
 before_filter :authenticate
 
-# authenticate with privilege level :staff
-# User model must respond to #has_privilege_level?(privilege_level)
-before_filter { authenticate_with_privilege_level :staff }
+# authenticate with an authorization strategy
+def authenticate_as_admin
+  authenticate { |user| user.is_admin? }
+end
 
-# authenticate with custom privilege check
-before_filter { authenticate_user {|user| user.is_in_role?(:admin) }
+# get the authenticated user
+def set_current_user
+  @current_user = authenticate
+end
 ```
 
 ## Installation
