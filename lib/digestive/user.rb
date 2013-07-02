@@ -1,60 +1,29 @@
 # encoding: UTF-8
 
 module Digestive
-    class User < ::ActiveRecord::Base
-      DIGEST_REALM = 'user@example.com'
+  class User < ::ActiveRecord::Base
+    DIGEST_REALM = 'user@example.com'
 
-      belongs_to :role
-      has_many   :admin_sessions
+    validates  :username, presence: true, uniqueness: true
+    validates  :password, presence: true
 
-      validates  :username, presence: true, uniqueness: true
-      validates  :name, presence: true
-      validates  :password, presence: true
-      validates  :role_id, presence: true
-      validate   :role_exists
+    attr_accessible :username, :password
 
-      default_scope order: 'username'
+    before_save :digest_encrypt_password
 
-      attr_accessible :username, :password, :role_id, :name
+    def as_json(options={})
+      hash = super(options)
+      hash['user']['password'] = ''
+      hash
+    end
 
-      before_save :digest_encrypt_password
+    private
 
-      def role_name
-        role.name
-      end
-
-      def has_privilege_level?(role_name)
-        given_role = Role.find_by_name(role_name.to_s)
-        role.privilege_level <= given_role.privilege_level
-      end
-
-      def most_recent_admin_session
-        admin_sessions.first
-      end
-
-      def current_admin_session
-        admin_sessions.current.first
-      end
-
-      def as_json(options={})
-        hash = super(options)
-        hash['user']['password'] = ''
-        hash
-      end
-
-      private
-
-      def digest_encrypt_password
-        if password_changed? || username_changed?
-          a1 = [username, DIGEST_REALM, password].join(':')
-          self.password = Digest::MD5.hexdigest(a1).to_s
-        end
-      end
-
-      def role_exists
-        Role.find(self.role_id)
-      rescue
-        errors.add(:role_id, 'was not found')
+    def digest_encrypt_password
+      if password_changed? || username_changed?
+        a1 = [username, DIGEST_REALM, password].join(':')
+        self.password = Digest::MD5.hexdigest(a1).to_s
       end
     end
+  end
 end
