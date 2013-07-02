@@ -5,6 +5,9 @@ require_relative 'auth/service'
 module Digestive
   module Auth
     # Convenience method to require authentication.
+    # If successful, will set the @current_user
+    # instance variable of the including object to the
+    # authenticated user.
     # @param [Hash] options
     # @option options [Object] credentialed
     #   An object responding to constant DIGEST_REALM and
@@ -28,6 +31,7 @@ module Digestive
       provider = options[:provider]
       service = Service.new(credentialed, provider)
       service.authenticate(&strategy)
+      @current_user = service.user
     end
   end
 end

@@ -15,10 +15,9 @@ def authenticate_as_admin
   authenticate { |user| user.is_admin? }
 end
 
-# get the authenticated user
-def set_current_user
-  @current_user = authenticate
-end
+# on successful authentication, user stored in instance var
+# of including class
+@current_user.is_a?(User)
 ```
 
 ## Installation

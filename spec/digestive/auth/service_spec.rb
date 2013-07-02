@@ -30,13 +30,14 @@ describe Digestive::Auth::Service do
   end
 
   it 'should return the user if authenticated' do
-    @service.authenticated?.must_be_instance_of User
+    @service.authenticate
+    @service.user.must_be_instance_of User
   end
 
   it 'should use a strategy to authorize a user' do
-    strategy = ->(u) { false }
-    @service.authenticated?(strategy).must_equal nil
-    strategy = ->(u) { true }
-    @service.authenticated?(strategy).must_be_instance_of User
+    @service.authenticate { |u| false }
+    @service.user.must_equal nil
+    @service.authenticate { |u| true }
+    @service.user.must_be_instance_of User
   end
 end

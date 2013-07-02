@@ -5,7 +5,13 @@ module Digestive
     # Handles authentication of a credentialed object, using a given provider.
     # The credentialed object will normally be a user, and the provider
     # `ActionController::HttpAuthentication::Digest::ControllerMethods`.
+    # @!attribute [r] user
+    #   @return [Object]
+    #     The currently-authenticated user, or nil
     class Service
+
+      attr_reader :user
+
       # Create a new Digest::Auth::Service.
       # @param [Object] credentialed
       #   An object responding to constant DIGEST_REALM and
@@ -34,11 +40,8 @@ module Digestive
         end
       end
 
-      # Determine whether a user is currently authenticated.
-      # @param [Proc] strategy
-      #   Optional; an authorization strategy. See {#authenticate}
-      # @return [Object]
-      #   The authenticated user or nil
+      private
+
       def authenticated?(strategy=nil)
         realm = @credentialed::DIGEST_REALM
         strategy ||= ->(user) { true }
@@ -47,7 +50,7 @@ module Digestive
           user = @credentialed.find_by_username(username)
           user.nil? ? nil : user.password
         end
-        user if strategy.call(user)
+        @user = user if strategy.call(user)
       end
     end
   end
