@@ -18,9 +18,9 @@ describe Digestive::User do
 
   class AdminSession < ActiveRecord::Base
     class << self
-      attr_writer :current
+      attr_writer :current_session
     end
-    scope :current, -> { [@current] }
+    scope :current, -> { @current_session }
   end
 
   before do
@@ -51,7 +51,7 @@ describe Digestive::User do
   end
 
   it 'should get a current admin session' do
-    AdminSession.current = @admin_session
+    AdminSession.current_session = @admin_session
     @user.current_admin_session.must_equal @admin_session
   end
 
