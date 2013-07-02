@@ -16,7 +16,7 @@ describe Digestive::User do
   end
 
   it 'should digest-encrypt the password on save' do
-    a1 = [@user.username, Digestive::User::DIGEST_REALM, @user.password].join(':')
+    a1 = [@user.username, @user.digest_realm, @user.password].join(':')
     encrypted_password = Digest::MD5.hexdigest(a1).to_s
     @user.save
     @user.password.must_equal encrypted_password

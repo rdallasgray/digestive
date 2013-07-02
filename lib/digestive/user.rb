@@ -11,6 +11,10 @@ module Digestive
 
     before_save :digest_encrypt_password
 
+    def digest_realm
+      DIGEST_REALM
+    end
+
     def as_json(options={})
       hash = super(options)
       hash['user']['password'] = ''
@@ -21,7 +25,7 @@ module Digestive
 
     def digest_encrypt_password
       if password_changed? || username_changed?
-        a1 = [username, DIGEST_REALM, password].join(':')
+        a1 = [username, digest_realm, password].join(':')
         self.password = Digest::MD5.hexdigest(a1).to_s
       end
     end
