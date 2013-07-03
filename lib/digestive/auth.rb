@@ -27,7 +27,7 @@ module Digestive
     # @return [Object]
     #   The authenticated user, or nil if authentication fails.
     def authenticate(options={}, &strategy)
-      credentialed = options[:credentialed] || User
+      credentialed = options[:credentialed] || ::User
       provider = options[:provider]
       service = Service.new(credentialed, provider)
       service.authenticate(&strategy)

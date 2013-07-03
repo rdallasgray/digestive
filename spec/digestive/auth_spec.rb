@@ -17,7 +17,7 @@ describe Digestive::Auth do
 
   it 'should provide a convenience method' do
     service = Digestive::Auth::Service.new(::User)
-    Digestive::Auth::Service.expects(:new).with(Digestive::User, nil)
+    Digestive::Auth::Service.expects(:new).with(::User, nil)
       .returns(service)
     service.expects(:authenticate)
     @authenticatable.authenticate
